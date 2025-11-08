@@ -217,4 +217,15 @@ export class GlobalConfig {
 
 	@Nested
 	dataTable: DataTableConfig;
+
+	sanitize() {
+		// Prioritize Railway's PORT environment variable over N8N_PORT
+		// This allows deployment on platforms like Railway that assign dynamic ports
+		if (process.env.PORT) {
+			const railwayPort = parseInt(process.env.PORT, 10);
+			if (!isNaN(railwayPort)) {
+				this.port = railwayPort;
+			}
+		}
+	}
 }
